@@ -24,11 +24,11 @@ function parseConfig(config:tsConfigFile) {
 function preparePaths(paths: ts.MapLike<string[]>) {
     const pathsObj:ts.MapLike<string[]> = {}
 
-    const keys = Object.keys(paths).map(path => path.replace('*', ''))
+    const keys = Object.keys(paths).map(path => path.replace('/*', ''))
     const values = Object.values(paths)
 
     keys.forEach((key, i) => {
-        pathsObj[key] = values[i].map(value => value.replace('*', ''))
+        pathsObj[key] = values[i].map(value => value.replace('/*', ''))
     })
 
     return pathsObj

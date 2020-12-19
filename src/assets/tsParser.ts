@@ -10,7 +10,6 @@ var compilerOptions: CompilerOptions;
 function replaceString(file: StreamFile) {
   return (match: string) => {
     let replacePath = compilerOptions.paths[match][0]
-    const postfix = replacePath.slice(-1) === '/' ? '/' : ''
     
     replacePath = relative(
       dirname(file.path),
@@ -18,15 +17,15 @@ function replaceString(file: StreamFile) {
     )
     const prefix = /\.|\//.test(replacePath.charAt(0)) ? '' : './'
 
-    return `${prefix}${replacePath}${postfix}`
+    return `${prefix}${replacePath}`
   }
 }
 
 export function tsParser(file: StreamFile, tsConfig: CompilerOptions) {
   compilerOptions = getConfig()
-
+  
   const replaceOption = {
-    from: Object.keys(compilerOptions.paths).map(alias => new RegExp(alias, 'g')),
+    from: Object.keys(compilerOptions.paths).map(alias => new RegExp(`(?<=(require *\\(|import *\\(|from *)['"])${alias}(?=['"/])`, 'g')),
     to: replaceString(file)
   }
   const [, result] = makeReplacements(file.contents.toString(), replaceOption.from, replaceOption.to, file.path, false)

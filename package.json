@@ -1,7 +1,7 @@
 {
   "name": "gulp-simple-typescript",
   "description": "This is a simple typescript parser",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "repository": "https://github.com/Bruno-Casas/gulp-simple-typescript",
   "author": "Bruno Casas <brunocasas04@gmail.com>",
   "license": "MIT",
