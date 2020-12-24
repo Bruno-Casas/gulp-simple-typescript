@@ -1,6 +1,6 @@
 import { Transform } from 'stream'
-import { tsParser } from './assets/tsParser'
-import Vinyl, { StreamFile } from 'vinyl'
+import { tsParser } from './assets/parser'
+import { StreamFile } from 'vinyl'
 import through from 'through2'
 import { loadCompilerOptions, getConfig } from './assets/configManager'
 
@@ -15,18 +15,13 @@ function simpleTypescript():Transform {
 
   if (!config) loadCompilerOptions()
 
-  const transformStream = new Transform({ objectMode: true })
-
-  transformStream._transform = (file:StreamFile, _encoding: string | undefined, callback) => {
-    var error = null
+  return through.obj((file:StreamFile, _encoding: string | undefined, callback) => {
+    const err = null
     if (file.extname == '.ts') {
-      file = tsParser(file, getConfig())
+      file = tsParser(file)
     }
-
-    callback(error, file)
-  }
-
-  return transformStream
+    callback(err, file)
+  })
 }
 
 function loadTsConfig(path?:string):SimpleTypescriptFunction {
